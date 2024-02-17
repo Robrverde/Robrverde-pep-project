@@ -67,7 +67,6 @@ public class AccountDAO {
 
     public Account searchAccountByID(int account_id)
     {
-
         Connection connection = ConnectionUtil.getConnection();
         try 
         {

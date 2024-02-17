@@ -41,4 +41,31 @@ public class MessageService {
     {
         return messageDAO.searchMessageByID(message_id);
     }
+
+    public Message deleteMessage(int message_id)
+    {
+        //check if the message exist, and the new text is valid (the new message_text is not blank and is not over 255 characters)
+        Message message = messageDAO.searchMessageByID(message_id);
+        
+        //if the message exist delete it and return a reference of the deleted message
+        if(message != null)
+        {
+            messageDAO.deleteMessageByID(message_id);
+            return message;
+        }
+
+        return null;
+    }
+
+    public Message updateMessage(int message_id, Message message)
+    {
+        //check if the message exist, and the new text is valid (the new message_text is not blank and is not over 255 characters)
+        if(messageDAO.searchMessageByID(message_id) != null && message.getMessage_text().length() > 0 && message.getMessage_text().length() <= 255)
+        {
+            messageDAO.updateMessage(message_id, message);
+            return messageDAO.searchMessageByID(message_id);
+        }
+
+        return null;
+    }
 }
