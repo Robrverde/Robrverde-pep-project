@@ -3,8 +3,6 @@ package Service;
 import Model.Account;
 import DAO.AccountDAO;
 
-import java.util.List;
-
 public class AccountService {
     private AccountDAO accountDAO;
 
@@ -24,7 +22,7 @@ public class AccountService {
     public Account addAccount(Account account)
     {
         //check if the account to be added is valid (username is not blank, password longer than 4 chars, and unique username)
-        if(account.getUsername().length() == 0 || account.getPassword().length() < 4)
+        if(account.getUsername().length() == 0 || account.getPassword().length() < 4 || searchAccount(account.getAccount_id()) != null)
             return null;
 
         return accountDAO.insertAccount(account);
@@ -32,7 +30,12 @@ public class AccountService {
 
     public Account loginAccount(String username, String password)
     {
-        return accountDAO.searchForAccountByUsername(username, password);
+        return accountDAO.searchAccountByUsername(username, password);
+    }
+
+    public Account searchAccount(int account_id)
+    {
+        return accountDAO.searchAccountByID(account_id);
     }
 
 

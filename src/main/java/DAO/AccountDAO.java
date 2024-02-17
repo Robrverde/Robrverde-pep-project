@@ -37,7 +37,7 @@ public class AccountDAO {
         return null;
     }
 
-    public Account searchForAccountByUsername(String username, String password)
+    public Account searchAccountByUsername(String username, String password)
     {
         Connection connection = ConnectionUtil.getConnection();
         try 
@@ -65,7 +65,7 @@ public class AccountDAO {
         return null;
     }
 
-    public Account searchForAccountByID(int account_id)
+    public Account searchAccountByID(int account_id)
     {
 
         Connection connection = ConnectionUtil.getConnection();
