@@ -4,8 +4,6 @@ import Model.Account;
 import Util.ConnectionUtil;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountDAO {
 
@@ -26,7 +24,8 @@ public class AccountDAO {
             preparedStatement.executeUpdate();
             ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
 
-            if(pkeyResultSet.next()){
+            if(pkeyResultSet.next())
+            {
                 int generated_account_id = (int) pkeyResultSet.getLong(1);
                 return new Account(generated_account_id, account.getUsername(), account.getPassword());
             }
@@ -41,7 +40,8 @@ public class AccountDAO {
     public Account searchForAccountByUsername(String username, String password)
     {
         Connection connection = ConnectionUtil.getConnection();
-        try {
+        try 
+        {
             //Write SQL logic to search for an entry in the database
             String sql = "SELECT * FROM Account WHERE Account.username = ? AND Account.password = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -51,11 +51,39 @@ public class AccountDAO {
             preparedStatement.setString(2, password);
             
             ResultSet rs = preparedStatement.executeQuery();
-            while(rs.next()){
+            while(rs.next())
+            {
                 Account account = new Account(rs.getInt("account_id"),
                         rs.getString("username"), 
                         rs.getString("password"));
 
+                return account;
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public Account searchForAccountByID(int account_id)
+    {
+
+        Connection connection = ConnectionUtil.getConnection();
+        try 
+        {
+            //Write SQL logic here
+            String sql = "SELECT * FROM Account WHERE Account.account_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            //write preparedStatement's setInt method here.
+            preparedStatement.setInt(1, account_id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next())
+            {
+                Account account = new Account(rs.getInt("account_id"),
+                        rs.getString("username"),
+                        rs.getString("password"));
                 return account;
             }
         }catch(SQLException e){
