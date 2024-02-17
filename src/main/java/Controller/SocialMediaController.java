@@ -4,7 +4,7 @@ import Model.Account;
 import Model.Message;
 
 import Service.AccountService;
-//TODO: import Service.MessageService;
+import Service.MessageService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,12 +19,12 @@ import io.javalin.http.Context;
 public class SocialMediaController {
 
     AccountService accountService;
-    //MessageService messageService;
+    MessageService messageService;
 
     public SocialMediaController()
     {
         this.accountService = new AccountService();
-        //this.MessageService = new MessageService();
+        this.messageService = new MessageService();
     }
 
     /**
@@ -75,8 +75,17 @@ public class SocialMediaController {
             context.status(401);
     }
 
-    private void newMessagesHandler(Context context) {
-        context.json("sample text");
+    private void newMessagesHandler(Context context) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+ 
+        Message addedMessage = messageService.addMessage(message);
+
+        //check if the account was added succesfully and if posted_by refers to a real, existing user
+        if(addedMessage != null && accountService.searchAccount(addedMessage.getPosted_by()) != null)
+            context.json(mapper.writeValueAsString(addedMessage));
+        else
+            context.status(400);
     }
 
     private void getAllMessagesHandler(Context context) {
