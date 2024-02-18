@@ -126,8 +126,12 @@ public class SocialMediaController {
             context.json(mapper.writeValueAsString(updatedMessage));
     }
 
-    private void getAllMessagesByUserHandler(Context context) {
-        context.json("sample text");
+    private void getAllMessagesByUserHandler(Context context) throws JsonProcessingException{
+
+        int account_id = Integer.parseInt(context.pathParam("account_id"));
+        List<Message> messages = messageService.getAllMessagesFromUser(account_id);
+
+        context.json(messages);
     }
 
 
